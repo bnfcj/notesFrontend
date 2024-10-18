@@ -1,23 +1,13 @@
-import axios from "axios";
 import Button from "./Button";
-
+import notesServices from "../services/notesServices";
 Button;
 function NotesPost({ setNote, note, setNotes, notes }) {
-  const submitPost = () => {
-    axios
-      .post("http://localhost:3001/api/notes/", { content: note })
-      .then((res) => {
-        setNotes([...notes, res.data]);
-        setNote("");
-      })
-      .catch((err) => console.error(err));
-  };
   return (
     <>
       <input
         onKeyDown={(e) => {
-          if (e.target.value === "enter") {
-            submitPost();
+          if (e.key === "Enter") {
+            notesServices.submitPost(note, setNotes, notes, setNote);
           }
         }}
         style={{ width: "20%", marginRight: "3rem" }}
@@ -26,7 +16,12 @@ function NotesPost({ setNote, note, setNotes, notes }) {
         onChange={(e) => setNote(e.target.value)}
         placeholder="Note"
       />
-      <Button title={"save"} clickHandler={submitPost} />
+      <Button
+        title={"Save"}
+        clickHandler={() =>
+          notesServices.submitPost(note, setNotes, notes, setNote)
+        }
+      />
     </>
   );
 }
